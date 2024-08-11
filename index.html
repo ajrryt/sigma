@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are You Sigma? | Test</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            text-align: center;
+        }
+
+        .question-container {
+            font-size: 32px;
+            color: #00f2ff;
+            text-shadow: 0 0 10px #00f2ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 3px solid;
+            margin-bottom: 20px;
+            animation: blink 0.75s step-end infinite;
+            display: inline-block;
+        }
+
+        .answer-container {
+            font-size: 24px;
+            color: #ffa500;
+            text-shadow: 0 0 10px #ffa500, 0 0 20px #ff4500, 0 0 30px #ff4500;
+            margin-top: 20px;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .input-container {
+            margin-top: 10px;
+        }
+
+        .input-box {
+            padding: 10px;
+            font-size: 24px;
+            text-align: center;
+            color: #ffffff;
+            background-color: #1e1e1e;
+            border: 2px solid #00bfff;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        .error-message {
+            margin-top: 10px;
+            font-size: 20px;
+            color: #ff4500;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent; }
+            50% { border-color: #00f2ff; }
+        }
+    </style>
+</head>
+<body>
+    <div class="question-container" id="question-container"></div>
+    <div class="answer-container" id="answer-container"></div>
+    <div class="input-container">
+        <input type="text" id="input-box" class="input-box" maxlength="1" autofocus>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <script>
+        const questions = [
+            "Have You Met The Alpha Wolf?",
+            "Have You Ever Rizzed Up A Girl/Boy?",
+            "Do You Like Minecraft?",
+            "Do You Feel Like The Wolf Pack Leaves You Out?",
+            "Do You Think You Are The Sigma?",
+            "Do You Watch Skibidi Toilet?",
+            "Do You Know What Skibidi Means?",
+            "Have You Ever Watched The Lorax?",
+            "Are You Enjoying The Sigma Test?",
+            "Are You From Ohio?",
+            "Are You Subscribed To @ajrrYT on YouTube?",
+            "Have You Ever Watched Hentai?",
+            "Do You Dropship? 💀",
+            "Do You Like Furries?",
+            "Have You Ever Pirated A Game, Software, Apps, etc?",
+            "Are You Related To Logan Paul?",
+            "Are You Subscribed To MrBeast?",
+            "Do You Believe In Being Kind?",
+            "Have You Ever Accidentally Released Your Sigma From Within?",
+            "Type Y or N to end this test"
+        ];
+
+        let currentQuestionIndex = 0;
+        let sigmaScore = 0;
+
+        const questionContainer = document.getElementById("question-container");
+        const answerContainer = document.getElementById("answer-container");
+        const inputBox = document.getElementById("input-box");
+        const errorMessage = document.getElementById("error-message");
+
+        function typeText(element, text, callback) {
+            element.textContent = "";
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(callback, 500);
+                }
+            }, 50);
+        }
+
+        function deleteText(element, callback) {
+            let i = element.textContent.length;
+            const interval = setInterval(() => {
+                if (i > 0) {
+                    element.textContent = element.textContent.substring(0, i - 1);
+                    i--;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(callback, 500);
+                }
+            }, 30);
+        }
+
+        function showQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            typeText(questionContainer, currentQuestion, () => {
+                typeText(answerContainer, "answer wisely: (y/n)", () => {});
+            });
+        }
+
+        function calculateSigmaLevel() {
+            const sigmaLevel = (sigmaScore / questions.length) * 100;
+            return sigmaLevel;
+        }
+
+        function showResult() {
+            const sigmaLevel = calculateSigmaLevel();
+            questionContainer.textContent = `Your Sigma Level is: ${Math.round(sigmaLevel)} / 100`;
+            answerContainer.style.display = "none";
+            inputBox.style.display = "none";
+            errorMessage.style.display = "none";
+        }
+
+        function handleAnswerInput() {
+            const answer = inputBox.value.trim().toLowerCase();
+            if (answer === "y" || answer === "n") {
+                errorMessage.textContent = "";
+                if (answer === "y") {
+                    sigmaScore++;
+                }
+                inputBox.value = "";
+                deleteText(questionContainer, () => {
+                    deleteText(answerContainer, () => {
+                        currentQuestionIndex++;
+                        if (currentQuestionIndex < questions.length) {
+                            showQuestion();
+                        } else {
+                            showResult();
+                        }
+                    });
+                });
+            } else {
+                errorMessage.textContent = "Please enter Y or N.";
+                inputBox.value = "";
+            }
+        }
+
+        inputBox.addEventListener("keyup", (event) => {
+            if (event.key === "Enter") {
+                handleAnswerInput();
+            }
+        });
+
+        // Start the test
+        window.onload = () => {
+            showQuestion();
+            inputBox.focus();
+        };
+    </script>
+</body>
+</html>
